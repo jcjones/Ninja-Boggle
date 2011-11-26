@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <comment>NinjaBoggle Defaults</comment>
+
+<!--
+  <entry key="Hostname">localhost</entry>
+  <entry key="Port">20210</entry>
+  -->
+  <entry key="ShowSolutions">false</entry>
+
+</properties>

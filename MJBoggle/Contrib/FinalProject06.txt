@@ -1,0 +1,173 @@
+
+  COP5255 Concurrent Programming
+  Final Project
+  Spring 2006 
+   
+
+
+    Important dates:
+
+        March 21. Inform us (via WebCT) who your partner is, or if you
+will do the project alone.
+
+        April 6. Preliminary report due before class. Hard copy required.
+
+        April 20. Demo during class period. Code must be submitted
+electronically by 12:30pm.
+
+        April 25. Final report, including annotated printout of all
+source code due before class. Hard copy required.
+
+
+     
+
+
+    Problem description:
+
+This project is to design, document and implement multithreaded server
+and client software for a multiplayer interactive version of Boggle.
+
+*/The game /*
+
+The game consists of a set of N^2 dice with strings of letters on each
+side. At the start of the game, the dice are randomly arranged in an
+NxN grid. The game runs for T minutes during which time players compete
+to find the most words at least two letters long in the grid. A word is
+formed by starting with some die, and building the word by moving along
+a path of adjacent dice in the grid. Movement may be horizontal left or
+right, up or down, or diagonal. A square may not be visited more than
+once in a word. The first player to submit a word receives points equal
+to the number of letters in the word. [In the official game, N=4, T=3,
+and only words at least three letters long count, and receive a score of
+length-2. Also, players do not receive feedback during the game and
+words that are found by multiple players receive no points.]
+
+Example:
+
+[[example broke]]
+
+Some words on this board: HAY, QUIT, HAT, HATS, BUT, BUTS, BUY, BUYS,
+HUT, HUTS, SHUT, STAY, STAB, WIT, WITS, WITH, QUID....
+
+*/The interactive implementation/*
+
+A player contacts the server, [[which sends a list of existing games and
+the names of the players currently enrolled in each game.]] For each
+game, the amount of time remaining until start, or the time remaining
+until the game is over is also displayed. The user can then request to
+join an existing game, or request that a new game be created.
+
+When a new game is created, the server counts down for M seconds, then
+the board is displayed for all users who have enrolled in the game. The
+game continues for T seconds, and then the results are displayed. While
+the game is being played, users enter words. The word is validated (it
+must be a valid word on the current board according to the rules, and it
+must also be an English word) and scored. If the word has already been
+submitted, the score is zero. If the word has not already been
+submitted, the score is the length of the word. At all times, the
+players see the list of words they have submitted with their score (or
+an indication that the word is invalid if it is not in the board or not
+a word), the current score of the other players in that game, and a
+clock indicating how much longer the game has left. Players should also
+receive a visual indication when there are only X seconds left in the game.
+
+Servers must be able to handle an arbitrary number of simultaneous
+games, each with an arbitrary number of players. A (public domain) list
+of words (YAWL) that you can use is attached. The server should read
+the strings that form the sides of the die from a file. A list
+containing the ones that are found in the official Boggle game is also
+attached.
+
+You may choose any combination of Java and html for the implementation.
+For example, you might use html on the clients and servlets on the
+server, or servlets on the server and applets on the client, or
+stand-alone Java programs on both the client and server utilizing Java
+Web start to initiate the client, etc. You may use sockets or rpc for
+communication between the client and server. (There are other
+possibilities, as well. If in doubt, ask.) The server must, however,
+be multithreaded. In addition, it should use a parallel algorithm to
+find all the valid words on a board. This algorithm will be tested
+separately. Your user interface should be self-documenting and support
+the necessary functionality, but otherwise will not affect your grade.
+
+ 
+
+You have considerable freedom in this project to make choices about
+details that have not been specified in this description. When making
+choices, keep in mind that we will be able to spend only around 10-15
+minutes per project for testing, which includes downloading and
+installing any software necessary, and getting started. Therefore,
+although users need to have a name, it is not a good idea to perform any
+actions that take time but arent necessary for playing the game (for
+example elaborate registration procedures).
+
+
+    Deliverables
+
+
+      Preliminary report
+
+This document should be a draft of your final report (see below for
+requirements of the final report) that is as complete as you can make it
+at the time. It should at a minimum, describe the architecture of the
+system, all abstract data types that will be used including a
+description of how they will be synchronized, and a discussion of
+threads and when they will be created and what they do. Also, indicate
+the technology you will use for the solution.  The purpose of the
+preliminary report is to give you the opportunity to get feedback on
+your workboth project design and reportin time to use it to improve
+your final deliverables. Thus, the more complete your preliminary
+report, the better feedback you will obtain.
+
+
+      Demo
+
+We will demo the projects during the class period on April 20 in the lab
+E115. We will test each others programs, recording the experience on an
+evaluation sheet. You should create a web page that either starts the
+project, or contains all the instructions needed for testing.
+
+Important: */you will only have one chance for a demo/*. If it doesnt
+work, you will not have another opportunity.
+
+*Parallel algorithm for finding the words on a board*
+
+Your parallel algorithm for finding all the words on a board will be
+tested separately on a multiprocessor. It will be evaluated for
+performance and correctness. More details on this will be provided
+later. You will need to provide a wrapper class satisfying a given
+specification that will read a board from a file, find all the words on
+that board, and return a list of the words found.
+
+
+      Final report
+
+Your final report must contain a discussion of your design decisions,
+(Why did you do it the way you did? What other alternatives did you
+consider?), a description of the architecture of the project, a
+description of all of the threads that will be created (when are they
+created and what do they do) and a description of all the abstract data
+types and how they are synchronized. It should also include a
+description of the division of work on the project.
+
+If problems are revealed in the demo, you should also determine what
+caused the problem and describe how it could be fixed.
+
+Your report must also include a printout of all the source code from
+your project. It should be well-organized and annotated so it is easy
+to read and understand. You may want to write on the source code with
+a marker and/or highlighter pen.
+
+
+    Grading
+
+The grade will be based on 20% preliminary report, 30% demo, 10%
+parallel algorithm, and 40% final report.
+
+You may do this project in pairs (preferred) or alone.  Turn in one
+report per pair. You may use publicly available packages in your
+project provided you give appropriate credit in both your source code
+and your report.
+ 
+ 
+

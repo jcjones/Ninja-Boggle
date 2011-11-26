@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="NinjaBoggle" default="compile" basedir=".">
+	<description>
+        A multiplayer client/server Boggle game
+    </description>
+    
+    <property file="build.properties" />
+    <property file="sign.properties" />	
+	
+	<!-- Class path for running and compiling, not for Jars -->
+	<path id="project.classpath">
+		<pathelement path="${classpath}" />
+		<pathelement location="${build.dir.overall}" />
+	</path>	
+
+	<!-- Initialization targets -->
+	<target name="init" depends="init.server,init.client" />
+	<target name="init.client" depends="init.common" />
+	<target name="init.server" depends="init.common" />
+	<target name="init.common">
+		<tstamp />
+		<mkdir dir="${build.dir.overall}" />
+		<mkdir dir="${dist.dir.overall}" />
+	</target>	
+        
+	<!-- Targets for building / compiling -->
+	<target name="compile" depends="compile.client,compile.server,compile.observer" description="compile the source" />
+	<target name="compile.server" depends="init.server,compile.common" description="compile the server">
+		<javac srcdir="${src.dir.overall}" destdir="${build.dir.overall}" target="1.5" fork="true">
+			<classpath refid="project.classpath" />
+			<include name="MJBoggle/Server/**" />
+		</javac>
+	</target>
+	<target name="compile.client" depends="init.client,compile.common" description="compile the client">
+		<javac srcdir="${src.dir.overall}" destdir="${build.dir.overall}" target="1.5" fork="true">
+			<classpath refid="project.classpath" />
+			<include name="MJBoggle/Client/**" />
+		</javac>
+	</target>
+	<target name="compile.observer" depends="init.client,compile.common" description="compile the observer">
+		<javac srcdir="${src.dir.overall}" destdir="${build.dir.overall}" target="1.5" fork="true">
+			<classpath refid="project.classpath" />
+			<include name="MJBoggle/Observer/**" />
+		</javac>
+	</target>	
+	<target name="compile.common" depends="init.common">
+		<javac srcdir="${src.dir.overall}" destdir="${build.dir.overall}" target="1.5" fork="true">
+			<classpath refid="project.classpath" />			
+			<include name="MJBoggle/Support/**" />
+			<include name="MJBoggle/WordTree/**" />			
+		</javac>
+	</target>
+	
+	<!-- Targets for building the server  -->
+	<target name="clean" description="clean up" depends="clean.server,clean.client">
+		<delete dir="${build.dir.overall}" />
+		<delete dir="${dist.dir.overall}" />	
+	</target>
+	<target name="clean.common">
+		<delete dir="${build.dir.common}" />
+	</target>
+	<target name="clean.client" depends="clean.common" description="clean up">
+		<delete dir="${build.dir.client}" />
+	</target>
+	<target name="clean.server" depends="clean.common" description="clean up">
+		<delete dir="${build.dir.server}" />
+	</target>
+	
+	<target name="password">
+		 <input
+		     message="Please enter keystore password:"
+		         addproperty="keystore.password" />
+	</target>
+
+	<target name="dist" description="generate the distribution"
+		depends="jar.client,jar.observer,jar.server,dist.source">
+	</target>
+
+    <target name="dist.source">
+      <jar destfile="${dist.dir.overall}/NinjaBoggle-Source-Distribution.jar">
+        <fileset dir="."
+                 excludes="**/.svn/ **/dist/ **/build/ **.class **.xcf keystore.ks sign.properties **.jar"
+        />
+      </jar>
+    </target>
+	
+	<target name="jar.server" depends="compile.server,password">
+		<jar jarfile="${dist.dir.overall}/${dist.filename.server}-${app.version.server}.jar" basedir="${build.dir.overall}">
+			<include name="MJBoggle/Support/**" />
+			<include name="MJBoggle/WordTree/**" />			
+			<include name="MJBoggle/Server/**" />			
+			<fileset dir="${src.dir.overall}">
+				<include name="defaults.xml" />
+				<include name="MJBoggle/Contrib/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="${main.class.server}" />
+			</manifest>
+		</jar>
+		<signjar keystore="${keystore.name}"
+		         jar="${dist.dir.overall}/${dist.filename.server}-${app.version.server}.jar"
+		         alias="${keystore.alias}"
+		         storetype="${keystore.type}"
+		         storepass="${keystore.password}" />
+	</target>	
+	
+	<target name="jar.client" depends="compile.client,password">
+		<jar jarfile="${dist.dir.overall}/${dist.filename.client}-${app.version.client}.jar" basedir="${build.dir.overall}">
+			<include name="MJBoggle/Support/**" />
+			<include name="MJBoggle/WordTree/**" />
+			<include name="MJBoggle/Client/**" />
+			<fileset dir="${src.dir.overall}">
+				<include name="defaults.xml" />
+				<include name="MJBoggle/Client/images/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="${main.class.client}" />
+			</manifest>
+		</jar>
+			<signjar keystore="${keystore.name}"
+			         jar="${dist.dir.overall}/${dist.filename.client}-${app.version.client}.jar"
+			         alias="${keystore.alias}"
+			         storetype="${keystore.type}"
+			         storepass="${keystore.password}" />				
+	</target>
+	
+	<target name="jar.observer" depends="compile.observer,password">
+			<jar jarfile="${dist.dir.overall}/${dist.filename.observer}-${app.version.observer}.jar" basedir="${build.dir.overall}">
+				<include name="MJBoggle/Support/**" />
+				<include name="MJBoggle/WordTree/**" />			
+				<include name="MJBoggle/Client/**" />
+				<include name="MJBoggle/Observer/**" />
+				<fileset dir="${src.dir.overall}">
+					<include name="defaults.xml" />				
+					<include name="MJBoggle/Observer/images/**" />
+				</fileset>		
+				<manifest>
+					<attribute name="Main-Class" value="${main.class.observer}" />
+				</manifest>
+			</jar>
+			<signjar keystore="${keystore.name}"
+			         jar="${dist.dir.overall}/${dist.filename.observer}-${app.version.observer}.jar"
+			         alias="${keystore.alias}"
+			         storetype="${keystore.type}"
+			         storepass="${keystore.password}" />		
+	</target>	
+
+    <!-- build everything -->
+	<target name="all" depends="compile" description="Build everything.">
+		<echo message="Application built."/>
+	</target>
+
+</project>

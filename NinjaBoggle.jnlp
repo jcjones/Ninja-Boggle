@@ -1,0 +1,25 @@
+<!-- JNLP File for MJBoggle Application -->
+<jnlp
+  spec="1.0+"
+  codebase="http://www.pugsplaza.net/NinjaBoggle"
+  href="NinjaBoggle.jnlp">
+  <information>
+    <title>NinjaBoggle</title>
+    <vendor>Mikel and J.C.</vendor>
+
+    <homepage href="http://projects.gatorlug.org/ninjaboggle/"/>
+    <description>Massively Multiplayer Internet Boggle</description>
+    <description kind="short">Our final project for COP5255 at the University of Florida, Spring 2006</description>
+    <icon href="boggleicon.gif"/>
+    <icon kind="splash" href="ninjasplash.jpg"/>
+    <offline-allowed/> 
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <j2se version="1.5+"/>
+    <jar href="jars/NinjaBoggle-Client-0.2.jar"/>
+  </resources>
+  <application-desc main-class="MJBoggle.Client.Client"/>
+</jnlp>
